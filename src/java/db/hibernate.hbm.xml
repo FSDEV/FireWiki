@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="db.User" table="USERS">
+    <id column="ID" name="id" type="integer">
+      <generator class="native"/>
+    </id>
+    <property column="NAME" name="name" type="string"/>
+    <property column="EMAIL" name="email" type="string" unique="true"/>
+    <property column="PASSWORD" name="password" type="string"/>
+    <property column="ACTIVATION_KEY" name="activationKey" type="string"/>
+    <property column="ACTIVE" name="active" type="yes_no"/>
+    <property column="ADMIN" name="admin" type="yes_no"/>
+    <property column="BANNED" name="banned" type="yes_no"/>
+  </class>
+  <class name="db.WikiPage" table="WIKI_PAGES" dynamic-update="true">
+    <id column="PAGE_ID" name="pageId" type="integer">
+      <generator class="native"/>
+    </id>
+    <property column="PATH" name="path" type="string"/>
+    <list name="cachedOutput" table="CACHED_OUTPUT" cascade="all" lazy="false">
+        <key column="PAGE_ID"/>
+        <list-index column="IDX"/>
+        <element type="string" column="STRING"/>
+    </list>
+    <list name="markupSource" table="MARKUP_SOURCE" cascade="all" lazy="false">
+        <key column="PAGE_ID"/>
+        <list-index column="IDX"/>
+        <element type="string" column="STRING"/>
+    </list>
+  </class>
+</hibernate-mapping>
