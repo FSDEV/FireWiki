@@ -25,13 +25,17 @@ public class WikiEdit extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String page = null;
+		String newPage = null;
 		String editText = null;
 		boolean preview = false;
 		boolean save = false;
+		boolean delete = false;
 		page = request.getParameter("page");
+		newPage = request.getParameter("newPage");
 		editText = request.getParameter("editText");
 		preview = (request.getParameter("preview")==null)?false:true;
 		save = (request.getParameter("save")==null)?false:true;
+		delete = (request.getParameter("delete")==null)?false:true;
 
 		if(page == null) {
 			request.getRequestDispatcher("/WEB-INF/Error404.jsp")
@@ -46,10 +50,25 @@ public class WikiEdit extends HttpServlet {
 			return;
 		}
 
+		request.setAttribute("newPage", page);
+
 		WikiPageController wpc = new WikiPageController();
 
+		if(delete!=false) {
+			// show successful deletion page
+			response.sendRedirect(request.getContextPath()
+					+response.encodeRedirectURL("/wiki"));
+
+			return;
+		}
 		if(editText!=null&&save==true) {
 			log("edit text isn't null, save is true");
+
+			if(!page.equals(newPage)) {
+				wpc.movePage(wpc.getPageForPath(page), newPage);
+				page = newPage;
+			}
+
 			wpc.setPageMarkup(page, editText);
 
 			request.setAttribute("wikiOutput",wpc.getPageHtml(page));

@@ -1,12 +1,10 @@
 package controller;
 
-import db.HibernateUtil;
 import db.WikiPage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.xml.sax.SAXException;
 
@@ -14,14 +12,12 @@ import org.xml.sax.SAXException;
  *
  * @author cmiller
  */
-public class WikiPageController {
-
-	private Session s;
+public class WikiPageController extends Controller {
 
 	private static final int STRING_LENGTH  =255;
 
 	public WikiPageController() {
-		s = HibernateUtil.getSessionFactory().openSession();
+		super();
 	}
 
 	public void end() {
@@ -146,6 +142,18 @@ public class WikiPageController {
 		}
 		else
 			return mergeString(wpage.getCachedOutput());
+	}
+
+	public void movePage(WikiPage page, String path) {
+		page.setPath(path);
+	}
+
+	public void deletePage(WikiPage page) {
+		Transaction tx0 = s.beginTransaction();
+
+		s.delete(page);
+
+		tx0.commit();
 	}
 
 	private List<String> cutString(String str, int length) {

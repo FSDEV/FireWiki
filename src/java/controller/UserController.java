@@ -1,6 +1,5 @@
 package controller;
 
-import db.HibernateUtil;
 import db.User;
 import helper.MailHelper;
 import java.security.MessageDigest;
@@ -9,19 +8,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /**
  *
  * @author cmiller
  */
-public class UserController {
-
-	private Session s;
+public class UserController extends Controller {
 
 	public UserController() {
-		s = HibernateUtil.getSessionFactory().openSession();
+		super();
 	}
 
 	public User createUser(String email) {

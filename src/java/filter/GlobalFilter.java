@@ -41,8 +41,6 @@ public class GlobalFilter implements Filter {
 		request.getRequestDispatcher("/WEB-INF/footer.jsp")
 				.include(request, response);
 
-		System.gc();
-
     }
 
     /**
