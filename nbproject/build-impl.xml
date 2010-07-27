@@ -246,9 +246,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
-            <attribute default="/does/not/exist" name="gensrcdir"/>
+            <attribute default="${empty.dir}" name="gensrcdir"/>
             <element name="customize" optional="true"/>
             <sequential>
+                <property location="${build.dir}/empty" name="empty.dir"/>
+                <mkdir dir="${empty.dir}"/>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <src>
                         <dirset dir="@{gensrcdir}" erroronmissingdir="false">
@@ -562,11 +564,15 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.FSCode.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.FSCode.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.jstl11.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.jstl11.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.ejb3-persistence.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.ejb3-persistence.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.GreenMail.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.GreenMail.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.JavaMail.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JavaMail.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.dsn.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.dsn.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.imap.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.imap.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.mailapi.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.mailapi.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.pop3.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.pop3.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.smtp.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.smtp.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.mail.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.mail.jar" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.hibernate-support.classpath} ${manifest.file.reference.derbyclient.jar} ${manifest.reference.FSCode.jar} ${manifest.libs.jstl11.classpath} ${manifest.libs.ejb3-persistence.classpath} ${manifest.libs.GreenMail.classpath} ${manifest.libs.JavaMail.classpath} "/>
+            <attribute name="Class-Path" value="${manifest.libs.hibernate-support.classpath} ${manifest.file.reference.derbyclient.jar} ${manifest.reference.FSCode.jar} ${manifest.libs.jstl11.classpath} ${manifest.libs.ejb3-persistence.classpath} ${manifest.file.reference.dsn.jar} ${manifest.file.reference.imap.jar} ${manifest.file.reference.mailapi.jar} ${manifest.file.reference.pop3.jar} ${manifest.file.reference.smtp.jar} ${manifest.file.reference.mail.jar} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -575,8 +581,12 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.FSCode.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.jstl11.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.ejb3-persistence.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.GreenMail.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${libs.JavaMail.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.dsn.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.imap.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.mailapi.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.pop3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.smtp.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.mail.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
